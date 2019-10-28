@@ -49,12 +49,11 @@ def main(args):
     coordinates = Coordinates(*content)
     matrix = [[-1 for j in range(coordinates.width)] for i in range(coordinates.height)]
     print(np.asarray(matrix))
-    finish_y = coordinates.finish_y
     final_steps_number, matrix = Li_algorithm(matrix,
                                               coordinates.start_x,
                                               coordinates.start_y,
                                               coordinates.finish_x,
-                                              finish_y
+                                              coordinates.finish_y
                                               )
     print(np.asarray(matrix))
     if final_steps_number != -1:
@@ -66,8 +65,8 @@ def main(args):
               )
     else:
         print('Sorry, {} can\'t be reached from {}'.format(coordinates[4:6],
-                                                              coordinates[2:4]
-                                                              )
+                                                           coordinates[2:4]
+                                                           )
               )
     with open(args.outfile, 'w') as file:
         file.write(str(final_steps_number))
