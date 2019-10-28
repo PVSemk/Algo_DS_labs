@@ -1,6 +1,8 @@
 from utils.utils import parse_arguments
 from collections import namedtuple, deque
 import time
+import numpy as np
+
 
 def Li_algorithm(matrix, start_x, start_y, finish_x, finish_y):
     delta_coord = [(2, 1), (2, -1), (-2, 1), (-2, -1), (1, 2), (1, -2), (-1, 2), (-1, -2)]
@@ -19,9 +21,11 @@ def Li_algorithm(matrix, start_x, start_y, finish_x, finish_y):
             new_y = coordinates[1] + delta[1]
             if 0 <= new_x < matrix_height and 0 <= new_y < matrix_width and matrix[new_x][new_y] == -1:
                 cells_handling_queue.append((new_x, new_y))
-                matrix[new_x][new_y] = steps+1
+                matrix[new_x][new_y] = steps + 1
             if matrix[finish_x][finish_y] != -1:
                 return matrix[finish_x][finish_y], matrix
+    return matrix[finish_x][finish_y], matrix
+
 
 def main(args):
     Coordinates = namedtuple('Coordinates', 'height width start_x start_y finish_x finish_y')
@@ -32,26 +36,33 @@ def main(args):
             print('Inputs should be numbers')
     coordinates = Coordinates(*content)
     matrix = [[-1 for j in range(coordinates.width)] for i in range(coordinates.height)]
-    import numpy as np
     print(np.asarray(matrix))
+    finish_y = coordinates.finish_y
     final_steps_number, matrix = Li_algorithm(matrix,
-                          coordinates.start_x,
-                          coordinates.start_y,
-                          coordinates.finish_x,
-                          coordinates.finish_y
-                          )
+                                              coordinates.start_x,
+                                              coordinates.start_y,
+                                              coordinates.finish_x,
+                                              finish_y
+                                              )
     print(np.asarray(matrix))
-    print('You should spend at least {} '
-          'steps in order to reach {} from {}'.format(final_steps_number,
-                                                      coordinates[4:6],
-                                                      coordinates[2:4]
-                                                      )
-          )
+    if final_steps_number != -1:
+        print('You should spend at least {} '
+              'steps in order to reach {} from {}'.format(final_steps_number,
+                                                          coordinates[4:6],
+                                                          coordinates[2:4]
+                                                          )
+              )
+    else:
+        print('Sorry, {} can\'t be reached from {}'.format(coordinates[4:6],
+                                                              coordinates[2:4]
+                                                              )
+              )
     with open(args.outfile, 'w') as file:
         file.write(str(final_steps_number))
+
 
 if __name__ == '__main__':
     start = time.time()
     arguments = parse_arguments()
     main(arguments)
-    print('Taken time: {}'.format(time.time() - start))
+    print('Taken time: {:.5f}'.format(time.time() - start))
