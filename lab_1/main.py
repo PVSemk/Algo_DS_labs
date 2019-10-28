@@ -5,7 +5,7 @@ import numpy as np
 
 
 def Li_algorithm(matrix, start_x, start_y, finish_x, finish_y):
-    delta_coord = [(2, 1), (2, -1), (-2, 1), (-2, -1), (1, 2), (1, -2), (-1, 2), (-1, -2)]
+    delta_coord = [(1, -2), (2, -1), (2, 1), (1, 2)]
     cells_handling_queue = deque()
     steps = 0
     matrix[start_x][start_y] = steps
@@ -19,9 +19,21 @@ def Li_algorithm(matrix, start_x, start_y, finish_x, finish_y):
         for delta in delta_coord:
             new_x = coordinates[0] + delta[0]
             new_y = coordinates[1] + delta[1]
-            if 0 <= new_x < matrix_height and 0 <= new_y < matrix_width and matrix[new_x][new_y] == -1:
+            new_x_mirrored = coordinates[0] - delta[0]
+            new_y_mirrored = coordinates[1] - delta[1]
+
+            if 0 <= new_x < matrix_height\
+                    and 0 <= new_y < matrix_width\
+                    and matrix[new_x][new_y] == -1:
                 cells_handling_queue.append((new_x, new_y))
                 matrix[new_x][new_y] = steps + 1
+            elif \
+                    0 <= new_x_mirrored < matrix_height\
+                    and 0 <= new_y_mirrored < matrix_width\
+                    and matrix[new_x_mirrored][new_y_mirrored] == -1:
+                cells_handling_queue.append((new_x_mirrored, new_y_mirrored))
+                matrix[new_x_mirrored][new_y_mirrored] = steps + 1
+
             if matrix[finish_x][finish_y] != -1:
                 return matrix[finish_x][finish_y], matrix
     return matrix[finish_x][finish_y], matrix
