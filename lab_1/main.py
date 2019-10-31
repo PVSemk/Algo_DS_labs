@@ -1,7 +1,6 @@
 from utils.utils import parse_arguments
 from collections import namedtuple, deque
 import time
-import numpy as np
 
 
 def Li_algorithm(matrix, start_x, start_y, finish_x, finish_y):
@@ -47,14 +46,12 @@ def main(args):
             print('Inputs should be numbers')
     coordinates = Coordinates(*content)
     matrix = [[-1 for j in range(coordinates.width)] for i in range(coordinates.height)]
-    print(np.asarray(matrix))
     final_steps_number, matrix = Li_algorithm(matrix,
                                               coordinates.start_x,
                                               coordinates.start_y,
                                               coordinates.finish_x,
                                               coordinates.finish_y
                                               )
-    print(np.asarray(matrix))
     if final_steps_number != -1:
         print('You should spend at least {} '
               'steps in order to reach {} from {}'.format(final_steps_number,
