@@ -23,10 +23,16 @@ class BoardState:
             print('\n')
         return ''
 
-    def swap(self, pair_a, pair_b):
+    def swap_with_empty(self, pair_a, pair_b, direction):
         self.state[pair_a[0]][pair_a[1]], self.state[pair_b[0]][pair_b[1]] = self.state[pair_b[0]][pair_b[1]],\
                                                                              self.state[pair_a[0]][pair_a[1]]
+        self.empty_cell = EmptyLocation(pair_b[0], pair_b[1])
+        self.move_from_parent = direction
         return None
+
+    def __deepcopy__(self, memodict={}):
+        obj_state = [r[:] for r in self.state]
+        return type(self)(obj_state, self.empty_cell, self.parent, self.move_from_parent)
 
 
 def initialize_board(shuffled_word):
