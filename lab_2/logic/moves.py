@@ -1,60 +1,24 @@
-from copy import deepcopy
-from collections import deque
-from .board import EmptyLocation
-
-
-def move_down(state):
-    x, y = state.empty_cell.x, state.empty_cell.y
-    state.swap((x, y), (x + 1, y))
-    state.move_from_parent = 'Down'
-    state.empty_cell = EmptyLocation(x + 1, y)
-    return None
-
-
-def move_up(state):
-    x, y = state.empty_cell.x, state.empty_cell.y
-    state.swap((x, y), (x - 1, y))
-    state.move_from_parent = 'Up'
-    state.empty_cell = EmptyLocation(x-1, y)
-    return None
-
-
-def move_left(state):
-    x, y = state.empty_cell.x, state.empty_cell.y
-    state.swap((x, y), (x, y - 1))
-    state.move_from_parent = 'Left'
-    state.empty_cell = EmptyLocation(x, y - 1)
-    return None
-
-
-def move_right(state):
-    x, y = state.empty_cell.x, state.empty_cell.y
-    state.swap((x, y), (x, y + 1))
-    state.move_from_parent = 'Right'
-    state.empty_cell = EmptyLocation(x, y + 1)
-    return None
+from .board import BoardState, EmptyLocation
 
 
 def make_moves(state):
     next_states = []
-    tmp = deepcopy(state)
-    tmp.parent = state
-    if 0 <= state.empty_cell.x < 2:
-        move_down(tmp)
-        next_states.append(tmp)
-        tmp = deepcopy(state)
-        tmp.parent = state
-    if 1 <= state.empty_cell.x < 3:
-        move_up(tmp)
-        next_states.append(tmp)
-        tmp = deepcopy(state)
-        tmp.parent = state
-    if 0 <= state.empty_cell.y < 2:
-        move_right(tmp)
-        next_states.append(tmp)
-        tmp = deepcopy(state)
-        tmp.parent = state
-    if 1 <= state.empty_cell.y < 3:
-        move_left(tmp)
-        next_states.append(tmp)
+    empty_row = state.empty_cell.x
+    empty_col = state.empty_cell.y
+
+    left = (empty_row, empty_col - 1)
+    right = (empty_row, empty_col + 1)
+    up = (empty_row - 1, empty_col)
+    down = (empty_row + 1, empty_col)
+
+    for new_coordinates, direction in zip([left, up, right, down], ['Left', 'Up', 'Right', 'Down']):
+        (new_empty_row, new_empty_col) = new_coordinates
+
+        if 0 <= new_empty_row < 3 and 0 <= new_empty_col < 3:
+            new_state = [r[:] for r in state.state]  # Taking slice in order to copy values, not reference to list
+            new_state[empty_row][empty_col], new_state[new_empty_row][new_empty_col] =  \
+                new_state[new_empty_row][new_empty_col], state.state[empty_row][empty_col]
+
+            next_states.append(BoardState(new_state, EmptyLocation(new_empty_row, new_empty_col), state, direction))
+
     return next_states
