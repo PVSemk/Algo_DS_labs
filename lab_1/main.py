@@ -27,8 +27,7 @@ def Li_algorithm(matrix, start_x, start_y, finish_x, finish_y):
                     and matrix[new_x][new_y] == -1:
                 cells_handling_queue.append((new_x, new_y))
                 matrix[new_x][new_y] = steps + 1
-            elif \
-                    0 <= new_x_mirrored < matrix_height\
+            if 0 <= new_x_mirrored < matrix_height\
                     and 0 <= new_y_mirrored < matrix_width\
                     and matrix[new_x_mirrored][new_y_mirrored] == -1:
                 cells_handling_queue.append((new_x_mirrored, new_y_mirrored))
