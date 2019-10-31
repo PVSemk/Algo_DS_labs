@@ -27,11 +27,10 @@ def move_right(state):
 
 def make_moves(state):
     next_states = []
-    tmp = deepcopy(state)
-    tmp.parent = state
     moves, shifts = [move_left, move_right, move_up, move_down], [(0, -1), (0, 1), (-1, 0), (1, 0)]
     for move, shift in zip(moves, shifts):
         tmp = deepcopy(state)
+        tmp.parent = state
         if check_move_possibility(tmp.empty_cell, shift):
             move(tmp)
             next_states.append(tmp)
