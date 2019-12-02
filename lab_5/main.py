@@ -33,6 +33,9 @@ class HashTable:
         hash_value = hashlib.md5(word.encode())
         return int(hash_value.hexdigest(), 16) % self.hash_table_size
 
+    def default_hash(self, word):
+        return hash(word) % self.hash_table_size
+
     def add(self, word):
         word_hash = self.hash_djb2(word) if self.use_djb2 else self.hash_md5(word)
 
@@ -68,27 +71,30 @@ def parse_arguments():
     parser = ArgumentParser()
     parser.add_argument(
         '--table_size',
-        default=700000,
+        default=1000,
         type=int,
         help='Size of hash table which will be created'
     )
     parser.add_argument(
         '--path_to_dict',
         type=str,
-        default='large_dict.txt',
+        default='dict.txt',
         help='Path to dictionary with words for hash table'
     )
     parser.add_argument(
         '--use_djb2',
         type=bool,
         default=True,
-        help='Use djb2 hash function or md5 hash in hash table'
+        help='Use djb2 hash function or md5 hash in hasqh table'
     )
 
     return parser.parse_args()
 
 
 def main():
+    a = 'road'
+    if a != 'road':
+        pass
     start_time = time.time()
     args = parse_arguments()
     with open(args.path_to_dict, 'r') as file:
