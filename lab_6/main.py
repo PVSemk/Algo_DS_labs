@@ -32,8 +32,6 @@ class HashTable:
         word_hash = self.hash_djb2(word)
         return (word_hash + try_number * self.second_hash(word_hash)) % self.hash_table_size
 
-
-
     def add(self, word):
         word_hash = self.hash_djb2(word)
 
@@ -85,9 +83,6 @@ def parse_arguments():
 
 
 def main():
-    a = 'road'
-    if a != 'road':
-        pass
     start_time = time.time()
     args = parse_arguments()
     with open(args.path_to_dict, 'r') as file:
