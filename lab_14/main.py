@@ -1,6 +1,7 @@
 import time
 from collections import defaultdict
 import heapq
+import numpy as np
 
 
 def create_spanning_tree(graph, start):
@@ -25,7 +26,7 @@ def create_spanning_tree(graph, start):
 
 
 def main():
-    with open('sample2.txt', 'r') as file:
+    with open('sample.txt', 'r') as file:
         adj_list = file.read().rstrip().split()
 
     vertex_amount = adj_list[0]
@@ -37,11 +38,13 @@ def main():
     # print(graph)
     span_tree = create_spanning_tree(graph, 1)
 
-    count = 0
-    for key in span_tree.keys():
-        print(key, end=' ')
-        count += 1
-    print('\n', count)
+    tree_vertexes = set()
+    for vertex, neighbours in span_tree.items():
+        print('{} -> {}'.format(vertex, neighbours))
+        tree_vertexes.add(vertex)
+        tree_vertexes.update(neighbours)
+
+    print(len(tree_vertexes))
 
 
 if __name__ == '__main__':
